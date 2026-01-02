@@ -18,11 +18,11 @@ pipeline {
                 script{
                     if (params.DEPLOY_TYPE == "namespace_create") {
                         withCredentials([file(credentialsId: 'k8s_master_config', variable: 'KUBECONFIG')]) {
-                            sh "kubectl create namespace argo --kubeconfig " + '${KUBECONFIG}'
+                            sh "kubectl create namespace argocd --kubeconfig " + '${KUBECONFIG}'
                         }
                     } else if (params.DEPLOY_TYPE == "namespace_delete") {
                         withCredentials([file(credentialsId: 'k8s_master_config', variable: 'KUBECONFIG')]) {
-                            sh "kubectl delete namespace argo --kubeconfig " + '${KUBECONFIG}'
+                            sh "kubectl delete namespace argocd --kubeconfig " + '${KUBECONFIG}'
                         }
                     } else {
                         echo "skip namespace"
@@ -38,7 +38,7 @@ pipeline {
                         withCredentials([file(credentialsId: 'k8s_master_config', variable: 'KUBECONFIG')]) {
                             def HELM_DEPLOY_COMMAND =  "helm upgrade ${params.TARGET_ARGO} ./${INSTALL_PATH}/${params.TARGET_ARGO} " +
                                 " -f ./${INSTALL_PATH}/${params.TARGET_ARGO}/values-dev.yaml" +
-                                " -n argo --install --kubeconfig " + '${KUBECONFIG}' +
+                                " -n argocd --install --kubeconfig " + '${KUBECONFIG}' +
                                 " --wait --timeout=10m "   // 최대 10분으로 설정
 
                             // image-updater일 경우 도커허브 credentials 주입
@@ -50,12 +50,12 @@ pipeline {
                             }
 
                             sh "eval ${HELM_DEPLOY_COMMAND}"
-                            // sh "helm update argo-cd -n argo --kubeconfig " + '${KUBECONFIG}' + " --wait --timeout=10m "
+                            // sh "helm update argo-cd -n argocd --kubeconfig " + '${KUBECONFIG}' + " --wait --timeout=10m "
                         }
 
                     } else if (params.DEPLOY_TYPE == "helm_uninstall") {
                         withCredentials([file(credentialsId: 'k8s_master_config', variable: 'KUBECONFIG')]) {
-                            sh "helm uninstall ${params.TARGET_ARGO} -n argo --kubeconfig " + '${KUBECONFIG}'
+                            sh "helm uninstall ${params.TARGET_ARGO} -n argocd --kubeconfig " + '${KUBECONFIG}'
 
                             // CRD 삭제
                             if (params.TARGET_ARGO == "argo-cd") {
