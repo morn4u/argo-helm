@@ -48,6 +48,7 @@ pipeline {
                                     HELM_DEPLOY_COMMAND += " --set config.registries[0].credentials=env:DOCKER_HUB_CREDS="+ '${USERNAME}' + ":" + '${PASSWORD}'
                                 }
                             }
+                            echo ${HELM_DEPLOY_COMMAND}
 
                             sh "eval ${HELM_DEPLOY_COMMAND}"
                             // sh "helm update argo-cd -n argocd --kubeconfig " + '${KUBECONFIG}' + " --wait --timeout=10m "
