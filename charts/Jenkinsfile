@@ -45,12 +45,12 @@ pipeline {
                             if (params.TARGET_ARGO == "argocd-image-updater") {
                                 // https://argocd-image-updater.readthedocs.io/en/stable/basics/update-methods/
                                 withCredentials([usernamePassword(credentialsId: 'docker_password', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                                    echo ${USERNAME}
-                                    echo ${PASSWORD}
+                                    echo '${USERNAME}'
+                                    echo '${PASSWORD}'
                                     HELM_DEPLOY_COMMAND += " --set config.registries[0].credentials=env:DOCKER_HUB_CREDS="+ '${USERNAME}' + ":" + '${PASSWORD}'
                                 }
                             }
-                            echo ${HELM_DEPLOY_COMMAND}
+                            echo '${HELM_DEPLOY_COMMAND}'
 
                             sh "eval ${HELM_DEPLOY_COMMAND}"
                             // sh "helm update argo-cd -n argocd --kubeconfig " + '${KUBECONFIG}' + " --wait --timeout=10m "
