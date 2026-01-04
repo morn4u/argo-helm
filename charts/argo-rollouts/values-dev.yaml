@@ -1,0 +1,7 @@
+controller:
+  replicas: 2
+
+dashboard:
+  service:
+    type: nodePort
+    nodePort: 30003
