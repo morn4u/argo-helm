@@ -4,5 +4,5 @@ controller:
 dashboard:
   enabled: true
   service:
-    type: nodePort
+    type: NodePort
     nodePort: 30003
